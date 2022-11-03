@@ -42,27 +42,27 @@
 [chara_new  name="yamato"  storage="chara/yamato/normal.png" jname="やまと" ]
 
 #
-さて、ゲームが簡単に作れるというから、来てみたものの[p]
+さて、ゲームが簡単に作れるというから、来てみたものの[m_p]
 
-誰もいねぇじゃねぇか。[p]
-……[p]
-帰るか。。。[p]
+誰もいねぇじゃねぇか。[m_p]
+……[m_p]
+帰るか。。。[m_p]
 
 [font  size="30"   ]
 #?
-ちょっとまったーーーーー[p]
+ちょっとまったーーーーー[m_p]
 [resetfont  ]
 
 #
-誰だ！？[p]
+誰だ！？[m_p]
 
 ;キャラクター登場
 [chara_show  name="akane"  ]
 #?
-こんにちは。[p]
-私の名前はあかね。[p]
+こんにちは。[m_p]
+私の名前はあかね。[m_p]
 #あかね
-もしかして、ノベルゲームの開発に興味があるの？[p]
+もしかして、ノベルゲームの開発に興味があるの？[m_p]
 
 [glink  color="blue"  storage="scene1.ks"  size="28"  x="360"  width="500"  y="150"  text="はい。興味あります"  target="*selectinterest"  ]
 [glink  color="blue"  storage="scene1.ks"  size="28"  x="360"  width="500"  y="250"  text="興味あります！"  target="*selectinterest"  ]

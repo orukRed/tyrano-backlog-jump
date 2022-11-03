@@ -1,5 +1,5 @@
 ;一番最初に呼び出されるファイル
-
+[plugin name="tyrano-backlog-jump" ]
 [title name="ティラノスクリプト解説"]
 
 [stop_keyconfig]
