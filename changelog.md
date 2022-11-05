@@ -4,3 +4,5 @@
 
 - リポジトリ作成
 - α版作成。
+
+[backLogJumpをtf変数にしておく #2]([https://](https://github.com/orukRed/tyrano-backlog-jump/issues/2))
