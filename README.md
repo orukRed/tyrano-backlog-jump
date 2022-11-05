@@ -21,6 +21,7 @@
 
 |  元の関数定義ファイル名  |上書きした関数定義ファイル名|  関数名  
 | ---- | ---- | ---- |
+|  kag.menu.js  | define.js |  loadGameData  |
 |  kag.menu.js  | define.js |  displayLog  |
 |  kag.menu.js  | define.js |  snapSave  |
 
