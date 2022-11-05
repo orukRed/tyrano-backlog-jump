@@ -42,11 +42,17 @@
 [chara_new  name="yamato"  storage="chara/yamato/normal.png" jname="やまと" ]
 
 #
+～tyrano-backlog-jumpのテスト用シナリオ～[m_p]
 さて、ゲームが簡単に作れるというから、来てみたものの[m_p]
-
 誰もいねぇじゃねぇか。[m_p]
 ……[m_p]
 帰るか。。。[m_p]
+1[m_p]
+2[m_p]
+3[m_p]
+4[m_p]
+5[m_p]
+
 
 [font  size="30"   ]
 #?
