@@ -26,9 +26,10 @@
   - ロード後にバックログが残っている場合、意図せぬセーブデータのバックログへとジャンプしてしまうことによる混乱を防ぐため。
 
 改造した関数は以下です。
-|  元の関数定義ファイル名  |上書きした関数定義ファイル名|  関数名  | 主な改造内容
-| ---- | ---- | ---- |
-|  kag.tag_system.js  | define.js |  tyrano.plugin.kag.tag.pushlog  |joinパラメータがfalseの箇所にはバックログジャンプができないような処理を追加|
+
+|  元の関数定義ファイル名  | 上書きした関数定義ファイル名 |  関数名  | 主な改造内容 |
+| ---- | ---- | ---- | ---- |
+|  kag.tag_system.js  | define.js |  tyrano.plugin.kag.tag.pushlog  | joinパラメータがfalseの箇所にはバックログジャンプができないような処理を追加|
 |  kag.tag.js  | define.js |  tyrano.plugin.kag.tag.text.pushTextToBackLog  |pushlogタグで追加したテキスト以外にの場合は中にcanBacklogJumpクラスを追加|
 |  kag.menu.js  | define.js |  tyrano.plugin.kag.menu.loadGameData  |ゲームロード時にバックログを全消去する処理を追加|
 |  kag.menu.js  | define.js |  tyrano.plugin.kag.menu.displayLog  |バックログのテキストをクリックできるようにし、クリックした地点へとジャンプできるように変更|
