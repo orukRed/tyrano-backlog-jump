@@ -642,11 +642,11 @@
 
 				//バックログ全文をarray_logに入れる
 				var array_log = that.kag.variable.tf.system.backlog;
-				for (var i = 0, hoge = 0; i < array_log.length; i++) {
+				for (var i = 0, j = 0; i < array_log.length; i++) {
 					//追加箇所start------------------------------------------------
 					let array_log_html = $.parseHTML(array_log[i]);
 					log_str += $(array_log_html).hasClass("canBacklogJump") ?
-						`<div class="backlogSerialNumber${hoge++}">${array_log[i]}</div>` :
+						`<div class="backlogSerialNumber${j++}">${array_log[i]}</div>` :
 						`<div>${array_log[i]}</div>`;
 					//追加箇所end------------------------------------------------
 				}
