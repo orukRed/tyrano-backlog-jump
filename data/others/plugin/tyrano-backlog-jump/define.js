@@ -6,21 +6,26 @@
       saveFile: [],//バックログジャンプに使うセーブデータの配列。最大保持数はconfig.tjsのbacklogNumに依存。
       isCanBacklogJumpText: true,//バックログジャンプができるテキストであるかどうか。基本的にtrueで、バックログにのみ表示するテキストでだけfalse
       pushSaveFile(pushData) {	//saveFileへの値追加。
-        //tyrano.plugin.kag.config.maxBackLogNumで指定した数を超えたら古いものから削除。
-        const backlogNum = tyrano.plugin.kag.config.maxBackLogNum;
-        if (backlogNum < this.saveFile.length) {
-          this.saveFile.splice(0, this.saveFile.length - backlogNum + 1);//最後に追加されたbacklogNum個だけを保持
-        }
         //データの挿入
         this.saveFile.push(pushData);
+        //tyrano.plugin.kag.config.maxBackLogNumで指定した数を超えたら古いものから削除。
+        if (tyrano.plugin.kag.config.maxBackLogNum < this.saveFile.length) {
+          this.saveFile.shift();
+        }
+
       }
     }
   };
-  let _wait = tyrano.plugin.kag.tag.p
+  let _p = tyrano.plugin.kag.tag.p
   let _kag = tyrano.plugin.kag.ftag.master_tag.p.kag
-  tyrano.plugin.kag.tag.p = $.extend(true, {}, _wait, {
+  tyrano.plugin.kag.tag.p = $.extend(true, {}, _p, {
     start: function () {
 
+
+      //追加箇所start------------------------------------------------
+      // this.kag.menu.snapSave("backlogJump", function () { });
+      // TYRANO.kag.ftag.startTag("savesnap", { title: "backlogJump" });
+      //追加箇所end------------------------------------------------
       var that = this;
 
       //改ページ
@@ -57,9 +62,6 @@
         this.kag.waitClick("p");
       }
 
-      //追加箇所start------------------------------------------------
-      this.kag.menu.snapSave("backlogJump", function () { });
-      //追加箇所end------------------------------------------------
 
     },
   });
@@ -757,7 +759,9 @@
       that.snap = $.extend(true, {}, $.cloneObject(data));
 
       //追加箇所start------------------------------------------------
-      tyrano.plugin.kag.tmp.orukred.backlogJump.pushSaveFile(that.snap);
+      if (title === "backlogJump") {
+        tyrano.plugin.kag.tmp.orukred.backlogJump.pushSaveFile(that.snap);
+      }
       //追加箇所end------------------------------------------------
       if (call_back) {
         call_back();
@@ -793,9 +797,10 @@
           data.layer = layer_obj;
 
           that.snap = $.extend(true, {}, $.cloneObject(data));
-
           //追加箇所start------------------------------------------------
-          tyrano.plugin.kag.tmp.orukred.backlogJump.pushSaveFile(that.snap);
+          if (title === "backlogJump") {
+            tyrano.plugin.kag.tmp.orukred.backlogJump.pushSaveFile(that.snap);
+          }
           //追加箇所end------------------------------------------------	
           if (call_back) {
             call_back();

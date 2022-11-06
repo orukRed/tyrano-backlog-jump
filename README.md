@@ -15,7 +15,7 @@
 
 1. data/others/plugin/tyrano-backlog-jumpフォルダを全て`「data/others/plugin/」` へ入れてください。
 2. `first.ks` 等のゲーム起動時に必ず通過するシナリオファイルに `[plugin name="tyrano-backlog-jump"]` を記述しプラグインを読み込みます。バックログにシナリオを書き込む前に本プラグインを読み込んでください。
-3. その後通常通りに`[p]`タグを使うことで、バックログジャンプ用のデータ処理が行われます。
+3. その後`[p]`や`[l]`の代わりに`[m_p]`や`[m_l]`タグを使うことで、バックログジャンプ用のデータ処理が行われます。（元の`[p]`や`[l]`は使用しないでください）
 4. 任意のタイミングでバックログを開き、テキストをクリックすることでその箇所へジャンプすることができます。
 
 ## 改造箇所
@@ -24,12 +24,10 @@
 
 - ロード時にバックログの全消去
   - ロード後にバックログが残っている場合、意図せぬセーブデータのバックログへとジャンプしてしまうことによる混乱を防ぐため。
-- [p]タグの上書き
 
 改造した関数は以下です。
 |  元の関数定義ファイル名  |上書きした関数定義ファイル名|  関数名  | 主な改造内容
 | ---- | ---- | ---- |
-|  kag.tag.js  | define.js |  tyrano.plugin.kag.tag.p |pタグ呼び出しごとにsavesnapタグを呼び出すように変更|
 |  kag.tag_system.js  | define.js |  tyrano.plugin.kag.tag.pushlog  |joinパラメータがfalseの箇所にはバックログジャンプができないような処理を追加|
 |  kag.tag.js  | define.js |  tyrano.plugin.kag.tag.text.pushTextToBackLog  |pushlogタグで追加したテキスト以外にの場合は中にcanBacklogJumpクラスを追加|
 |  kag.menu.js  | define.js |  tyrano.plugin.kag.menu.loadGameData  |ゲームロード時にバックログを全消去する処理を追加|
