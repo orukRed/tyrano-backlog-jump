@@ -1,10 +1,10 @@
+//諸々の関数の置き換えやバックログジャンプ用の変数定義
 (function () {
 
 	tyrano.plugin.kag.tmp.orukred = {
 		backlogJump: {
-			saveFile: [],//バックログジャンプに使うセーブデータの配列。最大保持数は
-			isShowBacklogText: false,//[m_p]タグの前にあったテキストをバックログに表示するかどうか。
-
+			saveFile: [],//バックログジャンプに使うセーブデータの配列。最大保持数はconfig.tjsのbacklogNumに依存。
+			isCanBacklogJumpText: true,//バックログジャンプができるテキストであるかどうか。基本的にtrueで、バックログにのみ表示するテキストでだけfalse
 			pushSaveFile(pushData) {	//saveFileへの値追加。
 				//tyrano.plugin.kag.config.maxBackLogNumで指定した数を超えたら古いものから削除。
 				const backlogNum = tyrano.plugin.kag.config.maxBackLogNum;
@@ -16,8 +16,111 @@
 			}
 		}
 	};
+	let _wait = tyrano.plugin.kag.tag.p
+	let _kag = tyrano.plugin.kag.ftag.master_tag.p.kag
+	tyrano.plugin.kag.tag.p = $.extend(true, {}, _wait, {
+		start: function () {
+
+			var that = this;
+
+			//改ページ
+			this.kag.stat.flag_ref_page = true;
+
+			this.kag.stat.is_click_text = false;
+			this.kag.ftag.showNextImg();
+
+			if (this.kag.stat.is_skip == true) {
+				//スキップ中の場合は、nextorder
+				this.kag.ftag.nextOrder();
+			} else if (this.kag.stat.is_auto == true) {
+				this.kag.stat.is_wait_auto = true;
+
+				var auto_speed = that.kag.config.autoSpeed;
+				if (that.kag.config.autoSpeedWithText != "0") {
+					var cnt_text = this.kag.stat.current_message_str.length;
+					auto_speed = parseInt(auto_speed) + parseInt(that.kag.config.autoSpeedWithText) * cnt_text;
+				}
+
+				setTimeout(function () {
+					if (that.kag.stat.is_wait_auto == true) {
+						//ボイス再生中の場合は、オートで次に行かない。効果音再生終了後に進めるためのフラグを立てる
+						if (that.kag.tmp.is_vo_play == true) {
+							that.kag.tmp.is_vo_play_wait = true;
+						} else {
+							that.kag.ftag.nextOrder();
+						}
+					}
+				}, auto_speed);
+			}
+
+			if (!this.kag.stat.is_skip) {
+				this.kag.waitClick("p");
+			}
+
+			//追加箇所start------------------------------------------------
+			this.kag.menu.snapSave("backlogJump", function () { });
+			//追加箇所end------------------------------------------------
+
+		},
+	});
+	tyrano.plugin.kag.ftag.master_tag.p = tyrano.plugin.kag.tag.p
+	tyrano.plugin.kag.ftag.master_tag.p.kag = _kag
+
+	tyrano.plugin.kag.tag.pushlog = {
+		vital: ["text"],
+
+		pm: {
+			text: "",
+			join: "false",
+		},
+
+		start: function (pm) {
+			if (pm.join == "true") {
+				this.kag.pushBackLog(pm.text, "join");
+			} else {
+				//追加箇所start------------------------------------------------
+				tyrano.plugin.kag.tmp.orukred.backlogJump.isCanBacklogJumpText = false;
+				this.kag.pushBackLog(pm.text, "add");
+				tyrano.plugin.kag.tmp.orukred.backlogJump.isCanBacklogJumpText = true;
+				//追加箇所end------------------------------------------------
+			}
+
+			this.kag.ftag.nextOrder();
+		},
+	};
 
 
+	tyrano.plugin.kag.tag.text.pushTextToBackLog = function (chara_name, message_str) {
+		// ひとつ前のログに連結させるべきかどうか
+		// たとえば[r][font][delay]などのタグを通過したあとは連結が有効になる
+		var should_join_log = this.kag.stat.log_join == "true";
+
+		// バックログへの追加
+		if ((chara_name != "" && !should_join_log) || (chara_name != "" && this.kag.stat.f_chara_ptext == "true")) {
+			// バックログにキャラ名を新しく書き出す場合
+			//追加箇所start------------------------------------------------
+			const log_str = tyrano.plugin.kag.tmp.orukred.backlogJump.isCanBacklogJumpText ?
+				`<b class="backlog_chara_name ${chara_name}">${chara_name}</b>：` + `<span class="backlog_text canBacklogJump ${chara_name}">${message_str}</span>` :
+				`<b class="backlog_chara_name ${chara_name}">${chara_name}</b>：` + `<span class="backlog_text ${chara_name}">${message_str}</span>`;
+			//追加箇所end------------------------------------------------
+			this.kag.pushBackLog(log_str, "add");
+
+			if (this.kag.stat.f_chara_ptext == "true") {
+				this.kag.stat.f_chara_ptext = "false";
+				this.kag.stat.log_join = "true";
+			}
+		} else {
+			// バックログにキャラ名を新しく書き出す必要がない場合
+			// const log_str = `<span class="backlog_text ${chara_name}">${message_str}</span>`;
+			//追加箇所start------------------------------------------------
+			const log_str = tyrano.plugin.kag.tmp.orukred.backlogJump.isCanBacklogJumpText ?
+				`<span class="backlog_text canBacklogJump ${chara_name}">${message_str}</span>` :
+				`<span class="backlog_text ${chara_name}">${message_str}</span>`;
+			//追加箇所end------------------------------------------------
+			const join_type = should_join_log ? "join" : "add";
+			this.kag.pushBackLog(log_str, join_type);
+		}
+	};
 
 
 	//追加箇所start（optionsへのデフォルト引数を追加）------------------------------------------------
@@ -45,7 +148,7 @@
 		//追加箇所start------------------------------------------------
 		if (isDeleteBacklog) {
 			this.kag.variable.tf.system.backlog = [];
-			tyrano.plugin.kag.tmp.orukred.saveFile = [];
+			tyrano.plugin.kag.tmp.orukred.backlogJump.saveFile = [];
 		}
 		//追加箇所end------------------------------------------------
 
@@ -539,10 +642,12 @@
 
 				//バックログ全文をarray_logに入れる
 				var array_log = that.kag.variable.tf.system.backlog;
-
-				for (var i = 0; i < array_log.length; i++) {
+				for (var i = 0, hoge = 0; i < array_log.length; i++) {
 					//追加箇所start------------------------------------------------
-					log_str += `<div class="backlogSerialNumber${i}">${array_log[i]}</div>`;
+					let array_log_html = $.parseHTML(array_log[i]);
+					log_str += $(array_log_html).hasClass("canBacklogJump") ?
+						`<div class="backlogSerialNumber${hoge++}">${array_log[i]}</div>` :
+						`<div>${array_log[i]}</div>`;
 					//追加箇所end------------------------------------------------
 				}
 
@@ -599,7 +704,6 @@
 	tyrano.plugin.kag.menu.snapSave = function (title, call_back, flag_thumb) {
 		// ティラノイベント"snapsave-start"を発火
 		var that = this;
-
 		this.kag.trigger("snapsave-start");
 
 		//画面のキャプチャも取るよ
@@ -653,9 +757,7 @@
 			that.snap = $.extend(true, {}, $.cloneObject(data));
 
 			//追加箇所start------------------------------------------------
-			if (title === "saveBacklogJump") {
-				tyrano.plugin.kag.tmp.orukred.backlogJump.pushSaveFile(that.snap);
-			}
+			tyrano.plugin.kag.tmp.orukred.backlogJump.pushSaveFile(that.snap);
 			//追加箇所end------------------------------------------------
 			if (call_back) {
 				call_back();
@@ -693,9 +795,7 @@
 					that.snap = $.extend(true, {}, $.cloneObject(data));
 
 					//追加箇所start------------------------------------------------
-					if (title === "saveBacklogJump") {
-						tyrano.plugin.kag.tmp.orukred.backlogJump.pushSaveFile(that.snap);
-					}
+					tyrano.plugin.kag.tmp.orukred.backlogJump.pushSaveFile(that.snap);
 					//追加箇所end------------------------------------------------	
 					if (call_back) {
 						call_back();
