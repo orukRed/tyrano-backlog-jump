@@ -42,33 +42,38 @@
 [chara_new  name="yamato"  storage="chara/yamato/normal.png" jname="やまと" ]
 
 #
-～tyrano-backlog-jumpのテスト用シナリオ～[m_p]
-さて、ゲームが簡単に作れるというから、来てみたものの[m_p]
-誰もいねぇじゃねぇか。[m_p]
-……[m_p]
-帰るか。。。[m_p]
-1[m_p]
-2[m_p]
-3[m_p]
-4[m_p]
-5[m_p]
+～tyrano-backlog-jumpのテスト用シナリオ～[p]
+@pushlog text="おーい"
+さて、ゲームが簡単に作れるというから、来てみたものの[p]
+@pushlog text="あ"
+誰もいねぇじゃねぇか。[p]
+@pushlog text="え"
+……[p]
+@pushlog text="ふぁ"
+帰るか。。。[p]
+@pushlog text="ふぇ"
+1[p]
+2[p]
+3[p]
+4[p]
+5[p]
 
 
 [font  size="30"   ]
 #?
-ちょっとまったーーーーー[m_p]
+ちょっとまったーーーーー[p]
 [resetfont  ]
 
 #
-誰だ！？[m_p]
+誰だ！？[p]
 
 ;キャラクター登場
 [chara_show  name="akane"  ]
 #?
-こんにちは。[m_p]
-私の名前はあかね。[m_p]
+こんにちは。[p]
+私の名前はあかね。[p]
 #あかね
-もしかして、ノベルゲームの開発に興味があるの？[m_p]
+もしかして、ノベルゲームの開発に興味があるの？[p]
 
 [glink  color="blue"  storage="scene1.ks"  size="28"  x="360"  width="500"  y="150"  text="はい。興味あります"  target="*selectinterest"  ]
 [glink  color="blue"  storage="scene1.ks"  size="28"  x="360"  width="500"  y="250"  text="興味あります！"  target="*selectinterest"  ]
